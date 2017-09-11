@@ -50,7 +50,7 @@ function generateRandomNumber(numberRange) {
 var playerOne = {
         name: prompt("What's your name?"),
         lives: 9,
-        attackCard: 2,
+        attack: 6,
         skip: 1,
         play: true
     };
@@ -58,7 +58,7 @@ var playerOne = {
 var feralCat = {
         name: catNames[0],
         lives: 9,
-        attackCard: 1,
+        attack: 7,
         skip: 2,
         play: false
     };
@@ -67,11 +67,14 @@ var beginScenario = [", is on the brink of a break down(kicking kitty litter eve
             ", is threatening to spray the place up", ", wants to bite every customer in the place"];
 
 
-nextPlay(playerOne.name + ", you're the Manager of your local cat cafe, and the health inspector is visiting in 5mins. Your kittys are aware of the impending visit and all hell breaks loose!" +
+nextPlay(playerOne.name + ", you're the Manager of your local cat cafe, and the health inspector is visiting in 5 mins. Your kittys are aware of the impending visit and all hell breaks loose!" +
     " The ring leader, " + feralCat.name + " " + beginScenario[generateRandomNumber(beginScenario.length)]);
+
 document.getElementById("nextButton").onclick = function () {
     'use strict';
     nextPlay("Schwiffty");
+    document.getElementById("playerOneScore").innerHTML = playerOne.name + " Score: " + playerOne.lives;
+    document.getElementById("feralCatScore").innerHTML = feralCat.name + " Score: " + feralCat.lives;
 };
 // alert(playerOne.name + ", you're the Manager of your local cat cafe, and the health inspector is visiting in 5mins. Your kittys are aware of the impending visit and all hell breaks loose!");
 // alert("The ring leader, " + feralCat.name + " " + beginScenario[generateRandomNumber(beginScenario.length)]);
