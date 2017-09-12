@@ -26,19 +26,42 @@
 // lives === 0
 
 // lives
-// Attack(Play 3 times in a row)
 // Skip
 // Play
+/*
+Playing is when the player gets a scenario and an outcome for each play
+action buttons  |play button |skip button
+play button gets a random number between 0 and 10
 
+if the number is 3 then the player looses a life.
+
+How do you know its the end 5 rounds?
+
+the player will get the
+when the life is 0 then they lose
+
+scenario story[]+ scenario outcome
+
+evaluateLives(){
+   if (playerOne.lives === 0){
+
+ }
+}
+
+feralCat.name extends the there one claw and drags it across there throat to signal the game will be over soon
+
+
+*/
 /*jslint devel: true */
 /*global document: false */
 
 
 var catNames = ["Bubbles Cat", "Chuckles Cat", "Bob Cat", "Natasha Cat", "Boris Cat", "Fluffy Cat", "Smelly Cat" ];
-function nextPlay(currentPlay) {
+function addToPage(item, message) {
     "use strict";
-    document.getElementById("popBox").innerHTML = currentPlay;
+    document.getElementById(item).innerHTML = message;
 }
+
 
 function generateRandomNumber(numberRange) {
     "use strict";
@@ -46,35 +69,60 @@ function generateRandomNumber(numberRange) {
         return Math.floor(Math.random() * (numberRange - 1));
     }
 }
-
+var round = 0;
 var playerOne = {
         name: prompt("What's your name?"),
-        lives: 9,
-        attack: 6,
+        lives: 3,
         skip: 1,
         play: true
     };
-
 var feralCat = {
-        name: catNames[0],
+        name: catNames[generateRandomNumber(catNames.length)],
         lives: 9,
-        attack: 7,
         skip: 2,
         play: false
     };
 
-var beginScenario = [", is on the brink of a break down(kicking kitty litter everywhere)", ", is buzzed up on Cat Nip and saying they will poo in all the shoes",
+function nextPlay(currentPlay, playNum) {
+    "use strict";
+    if (playNum === 3 && playerOne.lives === 0) {
+        addToPage("outcome", "You Lose");
+    } else {
+        addToPage("outcome", "What's Next");
+    }
+    addToPage("popBox", currentPlay + "<p>" + playNum + "</p>");
+    addToPage("nextButton", "Play");
+}
+
+
+
+
+function updateScores() {
+    'use strict';
+    // document.getElementById("playerOneScore").innerHTML = playerOne.name + " Score: " + playerOne.lives + "</br>Skips Left: " + playerOne.skip + "Round:" + round;
+    addToPage("playerOneScore", playerOne.name + " Score: " + playerOne.lives + "</br>Skips Left: " + playerOne.skip + "Round:" + round);
+    addToPage("feralCatScore", feralCat.name + " Score: " + feralCat.lives);
+}
+
+var beginScenario = [", is on the brink of kicking kitty litter everywhere", ", is buzzed up on Cat Nip and saying she will poo in all the shoes",
             ", is threatening to spray the place up", ", wants to bite every customer in the place"];
 
 
-nextPlay(playerOne.name + ", you're the Manager of your local cat cafe, and the health inspector is visiting in 5 mins. Your kittys are aware of the impending visit and all hell breaks loose!" +
-    " The ring leader, " + feralCat.name + " " + beginScenario[generateRandomNumber(beginScenario.length)]);
+nextPlay("<p>" + playerOne.name + ", you're the Manager of your local cat cafe, and the health inspector is visiting today. Your kittys are aware of the impending visit and all hell breaks loose!</p> <p>The ring leader, "
+        + feralCat.name + " " + beginScenario[generateRandomNumber(beginScenario.length)] + " causing a true Catastrophe.</p><p> " + feralCat.name + ", Informs you the only way to save your cafe is to beat them in a game of Kitty Roulette</p>", 0);
+
 
 document.getElementById("nextButton").onclick = function () {
     'use strict';
-    nextPlay("Schwiffty");
-    document.getElementById("playerOneScore").innerHTML = playerOne.name + " Score: " + playerOne.lives;
-    document.getElementById("feralCatScore").innerHTML = feralCat.name + " Score: " + feralCat.lives;
+    //generates a number between 1 and 5
+    var randomNum = generateRandomNumber(6);
+    round += 1;
+    if (randomNum === 0) {
+        playerOne.lives -= 1;
+    }
+    nextPlay("Schwiffty", randomNum);
+
+    updateScores();
 };
 // alert(playerOne.name + ", you're the Manager of your local cat cafe, and the health inspector is visiting in 5mins. Your kittys are aware of the impending visit and all hell breaks loose!");
 // alert("The ring leader, " + feralCat.name + " " + beginScenario[generateRandomNumber(beginScenario.length)]);

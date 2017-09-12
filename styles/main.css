@@ -1,4 +1,17 @@
 body {
-  background: yellow;
   color: black;
+  background: black;
+}
+
+h1 {
+  border-bottom: 2px solid rgba(233, 30, 99, 0.58);
+  box-shadow: inset 0 -10px 0 rgba(233, 30, 99, 0.58);
+  text-decoration: none;
+  color: black;
+  width: 205px;
+}
+
+main {
+  padding: 20px;
+  background: white;
 }
