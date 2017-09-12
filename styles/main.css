@@ -11,7 +11,35 @@ h1 {
   width: 205px;
 }
 
+p {
+  font-family: monospace;
+}
+
 main {
   padding: 20px;
   background: white;
+  margin: 50px auto;
+}
+
+button {
+  background: #f27ca4;
+  color: white;
+  border: 0;
+  border-radius: 5px;
+  font-size: 15px;
+  padding: 9px 50px;
+  margin: 0px auto;
+  display: block;
+}
+
+
+.overlay {
+  background: rgba(41, 41, 41, 0.72);
+  width: 100%;
+  position: absolute;
+  height: 45vw;
+}
+
+#resetGame {
+  position: absolute;
 }
