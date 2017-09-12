@@ -19,6 +19,7 @@ main {
   padding: 20px;
   background: white;
   margin: 50px auto;
+  max-width: 430px;
 }
 
 button {
@@ -40,6 +41,10 @@ button {
   height: 45vw;
 }
 
+#resetGame.active {
+  display: block;
+}
+
 #resetGame {
-  position: absolute;
+  display: none;
 }

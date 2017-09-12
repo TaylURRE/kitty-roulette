@@ -1,66 +1,3 @@
-// Kitty Roulette
-//
-// You're the {assign a task} Manager 2 Lives Barista 3 Lives Owner 1 Life of your local cat cafe, and the health inspector is visiting in 5mins.
-// Your kittys are aware of the impending visit and all hell breaks loose!
-//
-// The ring leader,
-//
-// Bubbles, is on the brink of a break down(kicking kitty litter everywhere)
-// Fluffy, is threatening to spray the place up
-// Jinx, wants to bite every customer in the place
-//
-//
-// Only you can save the cafe, they challenge you to a game of kitty roulette
-//
-// If you win you take the place of the ring leader. You also keep your dignity and Cafe
-// If you lose you will fail health inspection and loose the Cat Cafe
-//
-// 9 lives
-//
-//
-// Losing Scenario
-// for Now
-// ScenarioNumber === 0
-//
-// Later
-// lives === 0
-
-// lives
-// Skip
-// Play
-/*
-Playing is when the player gets a scenario and an outcome for each play
-action buttons  |play button |skip button
-play button gets a random number between 0 and 10
-
-if the number is 3 then the player looses a life.
-
-How do you know its the end 5 rounds?
-
-the player will get the
-when the life is 0 then they lose
-
-scenario story[]+ scenario outcome
-
-evaluateLives(){
-   if (playerOne.lives === 0){
-
- }
-}
-Scenarios pulled from https://www.buzzfeed.com/lorynbrantz/16-hilarious-cat-stories-that-prove-cats-are-the-weirdest?utm_term=.jl5xbz4Jw#.qhQqDM2Oo
-
-feralCat.name extends the there one claw and drags it across there throat to signal the game will be over soon.
-They play five finger fillet with their sharpest claw and your fingers. You are shaking and afraid of the outcome this might be it for you...
-
-feralCat.name starts to look at you pleadingly, paces around, and meows insistently. Your ears begin to curdle, its a horrible sound...
-
-feralCat.name farts like a grown man. feralCat.name calls it death bye 1000 litter boxes...the smell chokes your and causes your right eye to twitch...
-
-feralCat.name pulls a Big RED button from their poofy coat while they look dead into your eyes they press the button. A coil from the $5000 espresso machine pops out...
-
-feralCat.name licks your hand and eyeballs unaware of if your are immune to TOXOPLASMOSIS turns out that you aren't
-
-*/
 /*jslint devel: true */
 /*global document: false */
 
@@ -82,7 +19,7 @@ function generateRandomNumber(numberRange) {
 
 function getName() {
     "use strict";
-    var name = prompt("What's your name?");
+    var name = prompt("What should we call you?");
     if (!name) {
         name = prompt("I missed that, what should we call you?");
         if (!name) {
@@ -110,15 +47,18 @@ function addToPage(item, message) {
 }
 function nextPlay(currentPlayScenario) {
     "use strict";
-    var olay = document.getElementById("overlay");
+    var olay = document.getElementById("overlay"),
+        resetBtn = document.getElementById("resetGame");
     if (round <= 5 && round > 0) {
         addToPage("nextButton", "Next Play");
         if (playerOne.lives === 0) {
             olay.className = "overlay";
+            resetBtn.className = "active";
             addToPage("outcome", feralCat.name + " signals for the kitties to demolish the cafe...Cuddles Cat gets you an espresso, some antibotics and a Newspaper to start your job search...You Lose!");
         } else if (round === 5) {
             addToPage("outcome", "But you Win the Game!" + feralCat.name + " takes a big yawn and proceeds to the scratching post, they get a few good scratches out and curls up by the window...Well Played Human.");
             olay.className = "overlay";
+            resetBtn.className = "active";
         } else {
             addToPage("outcome", "but you some how you survive and are ready to take on the next round!");
             console.log("You can continue to live");
@@ -156,4 +96,9 @@ document.getElementById("nextButton").onclick = function () {
     } else { addToPage("pointUpdate", ""); }
     nextPlay(feralCat.name + " " + currentScenario);
     updateScores();
+};
+
+document.getElementById("overlay").onclick = function () {
+    'use strict';
+    document.location.reload(true);
 };
