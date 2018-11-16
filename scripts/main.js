@@ -59,8 +59,9 @@ function nextPlay(currentPlayScenario) {
             olay.className = "overlay";
             resetBtn.className = "active";
         } else {
-            addToPage("outcome", "but you some how you survive and are ready to take on the next round!");
-            console.log("You can continue to live");
+            if (playerOne.lives % 2 === 0) {
+                addToPage("outcome", "but you some how you survive and are ready to take on the next round!");
+            } else { addToPage("outcome", "but you can continue to live"); }
         }
     } else if (round > 5) {
         addToPage("outcome", "GAME OVER");
@@ -79,7 +80,7 @@ nextPlay("<p>" + playerOne.name + ", you're the Manager of your local cat cafe, 
           "<p>The ring leader, " + feralCat.name + " " + beginScenario[generateRandomNumber(beginScenario.length)] + " causing a true Catastrophe.</p>" +
           "<p>" + feralCat.name + ", Informs you the only way to save your cafe is to beat them in a game of Kitty Roulette.</p>" +
           "<p>Normally they play Kitty Roulette with 9 lives but because of your feeble human body they are only giving you <b>3 Lives</b></p><p>" +
-          feralCat.name + " will put you through a series or random situations known to cause pain to humans. If you survive <b>5 Rounds</b> unharmed you Win...If you don't you will meet your demise and lose your job </p>", 0);
+          feralCat.name + " will put you through a series of random situations known to cause pain to humans. If you survive <b>5 Rounds</b> unharmed you Win...If you don't you will meet your demise and lose your job </p>", 0);
 
 
 document.getElementById("nextButton").onclick = function () {
