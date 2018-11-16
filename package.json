@@ -1,0 +1,22 @@
+{
+  "name": "kitty-roulette",
+  "version": "1.0.0",
+  "description": "A roulette game with unpredicatable kitties",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TaylURRE/kitty-roulette.git"
+  },
+  "author": "taylor dennis",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TaylURRE/kitty-roulette/issues"
+  },
+  "homepage": "https://github.com/TaylURRE/kitty-roulette#readme",
+  "dependencies": {
+    "jest": "^23.6.0"
+  }
+}
