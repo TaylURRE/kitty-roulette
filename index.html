@@ -7,20 +7,78 @@
       <link href="styles/main.css" type="text/css" rel="stylesheet">
   </head>
   <body>
-    <header></header>
+    <header>
+      Welcome to Kitty Roulette
+    </header>
     <div id="overlay">
       <button id="resetGame">Reset Game</button>
     </div>
     <main>
       <h1>Kitty Roulette</h1>
+      <!-- A game of chance a blurb to get started ... -->
+<form>
+  <label>What should we call you?</label>
+  <input id="playerName"></input>
+  <button id="playButton">let's play</button>
+</form>
+      
+<!--       
         <p id="playerOneScore"></p>
       <p id="popBox"></p>
       <p id="pointUpdate"></p>
-      <p id="outcome"></p>
-      <button id="nextButton">let's play</button>
-
+      <p id="outcome"></p> -->
+      
     </main>
     <footer></footer>
-    <script src="scripts/main.js" type="text/javascript"></script>
+    <script>
+  const catNames = ["Bubbles Cat", "Chuckles Cat", "Bob Cat", "Natasha Cat", "Boris Cat", "Fluffy Cat", "Smelly Cat"];
+
+  const randomNum = (max) => {
+      if (typeof max === "number") {
+        return Math.floor(Math.random() * (max - 1));
+      } else {
+        throw TypeError(`[randomNum]: max: ${max} should be of type number`)
+      }
+  }
+
+  const getName = () => { 
+    return new Promise(function(resolve) {
+      const playerName = document.getElementById('playerName').value;
+      if(playerName !== '') {
+        resolve(playerName);
+      } else {
+        resolve('Buttercup');
+      }
+    })
+  }
+
+  const createFeralCatName = () => {
+    return catNames[randomNum(catNames.length)]
+  }
+
+  const createPlayers = (playerOneName) => {
+    return new Promise(function(resolve) {
+      const feralCat = createFeralCatName();
+      const players = {
+        [playerOneName]: {
+          lives: 3,
+          skips: 1,
+        },
+        [feralCat]: {
+          lives: 9,
+        }
+      }
+      resolve(players);
+    })
+  }
+
+    document.getElementById('playButton').addEventListener('click', (e) => {
+      getName()
+      .then(name => createPlayers(name))
+      .then(players => console.log(players, 'playas'))
+      e.preventDefault();
+      })
+    </script>
+    <!-- <script src="scripts/main.js" type="text/javascript"></script> -->
   </body>
 </html>
