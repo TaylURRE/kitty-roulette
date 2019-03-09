@@ -7,21 +7,22 @@
       <link href="styles/main.css" type="text/css" rel="stylesheet">
   </head>
   <body>
-    <header>
-      Welcome to Kitty Roulette
-    </header>
     <div id="overlay">
       <button id="resetGame">Reset Game</button>
     </div>
     <main>
-      <h1>Kitty Roulette</h1>
-      <!-- A game of chance a blurb to get started ... -->
-<form>
-  <label>What should we call you?</label>
-  <input id="playerName"></input>
-  <button id="playButton">let's play</button>
-</form>
-      
+      <header>
+        <h1>Kitty Roulette</h1>
+      </header>
+      <div id="info">
+          <p>A game of chance, inspired by a <a href="https://www.buzzfeed.com/lorynbrantz/16-hilarious-cat-stories-that-prove-cats-are-the-weirdest?utm_term=.jl5xbz4Jw#.qhQqDM2Oo">Buzzfeed</a> post of weird Cats before we get started.</p>
+      </div>
+        <form>
+          <p>What should we call you?</p>
+          <input id="playerName" placeholder="Princess Buttercup"></input>
+          <button id="playButton">let's play</button>
+        </form>
+      <div id="scoreBoard"></div>
 <!--       
         <p id="playerOneScore"></p>
       <p id="popBox"></p>
@@ -31,51 +32,81 @@
     </main>
     <footer></footer>
     <script>
-  const catNames = ["Bubbles Cat", "Chuckles Cat", "Bob Cat", "Natasha Cat", "Boris Cat", "Fluffy Cat", "Smelly Cat"];
+    let players;
+    const catNames = ["Bubbles Cat", "Chuckles Cat", "Bob Cat", "Natasha Cat", "Boris Cat", "Fluffy Cat", "Smelly Cat"];
 
-  const randomNum = (max) => {
-      if (typeof max === "number") {
-        return Math.floor(Math.random() * (max - 1));
-      } else {
-        throw TypeError(`[randomNum]: max: ${max} should be of type number`)
-      }
-  }
-
-  const getName = () => { 
-    return new Promise(function(resolve) {
-      const playerName = document.getElementById('playerName').value;
-      if(playerName !== '') {
-        resolve(playerName);
-      } else {
-        resolve('Buttercup');
-      }
-    })
-  }
-
-  const createFeralCatName = () => {
-    return catNames[randomNum(catNames.length)]
-  }
-
-  const createPlayers = (playerOneName) => {
-    return new Promise(function(resolve) {
-      const feralCat = createFeralCatName();
-      const players = {
-        [playerOneName]: {
-          lives: 3,
-          skips: 1,
-        },
-        [feralCat]: {
-          lives: 9,
+    const randomNum = (max) => {
+        if (typeof max === "number") {
+          return Math.floor(Math.random() * (max - 1));
+        } else {
+          throw TypeError(`[randomNum]: max: ${max} should be of type number`)
         }
-      }
-      resolve(players);
-    })
-  }
+    }
+
+    function addToPage(element, content) {
+        element.innerHTML = content;
+    }
+
+    function playerStatsView(players) {
+      let playerContent = '<h4 style="background:#f27ca4;border-bottom: black 2px solid;text-align: center;margin:0px; color:white">Score Board</h4>';
+      let playerKeys = Object.keys(players);
+      const toString = JSON.stringify;
+
+      playerKeys.forEach(key => {
+        let id = playerKeys.indexOf(key);
+        let name = toString(key);
+        let lives = toString(players[key]["lives"]);
+        let skips = toString(players[key]["skips"]) || "0";
+        playerContent += 
+        `<ul style="list-style:none; display:inline-block; padding:0; width:100%; margin:0;border-bottom:2px solid;">
+            <li style="margin: 0 0 0 1em; font-size: 16px;"><p id="playerScore-${id}" class="name">${JSON.parse(name) + (id === 0 ? " (you)" : '')}</p></li>
+            <li style="margin: 0 0 0 1em"><p><b>lives:</b> ${JSON.parse(lives)}</p></li>
+            <li style="margin: 0 0 0 1em"><p><b>skips:</b> ${JSON.parse(skips)}</p></li>
+        </ul>
+        ` 
+      })
+
+      return `<div class="score" style="border:solid 2px; border-bottom: 0;display:block; margin-top: 1em;">${playerContent}</div>`;
+    }
+
+    const getName = () => { 
+      return new Promise(function(resolve) {
+        const playerName = document.getElementById('playerName').value;
+        if(playerName !== '') {
+          resolve(playerName);
+        } else {
+          resolve('Princess Buttercup');
+        }
+      })
+    }
+
+    const createFeralCatName = () => {
+      return catNames[randomNum(catNames.length)]
+    }
+
+    const createPlayers = (playerName) => {
+      return new Promise(function(resolve) {
+        const feralCat = createFeralCatName();
+        players = {
+          [playerName]: {
+            lives: 3,
+            skips: 1,
+          },
+          [feralCat]: {
+            lives: 9,
+          }
+        }
+        resolve(players);
+      })
+    }
 
     document.getElementById('playButton').addEventListener('click', (e) => {
       getName()
       .then(name => createPlayers(name))
-      .then(players => console.log(players, 'playas'))
+      .then(players => {
+        const $scoreBoard = document.getElementById('scoreBoard');
+        addToPage($scoreBoard, playerStatsView(players))
+      })
       e.preventDefault();
       })
     </script>
