@@ -16,24 +16,35 @@
       </header>
       <div id="info">
           <p>A game of chance, inspired by a <a href="https://www.buzzfeed.com/lorynbrantz/16-hilarious-cat-stories-that-prove-cats-are-the-weirdest?utm_term=.jl5xbz4Jw#.qhQqDM2Oo">Buzzfeed</a> post of weird Cats before we get started.</p>
+          <form>
+            <p>What should we call you?</p>
+            <input id="playerName" placeholder="Princess Buttercup"></input>
+          </form>
       </div>
-        <form>
-          <p>What should we call you?</p>
-          <input id="playerName" placeholder="Princess Buttercup"></input>
-          <button id="playButton">let's play</button>
-        </form>
-      <div id="scoreBoard"></div>
-<!--       
-        <p id="playerOneScore"></p>
-      <p id="popBox"></p>
-      <p id="pointUpdate"></p>
-      <p id="outcome"></p> -->
-      
+      <div id="buttonContainer">
+        <button id="playButton">let's play</button>
+      </div>
+      <div id="scoreBoard"></div>   
     </main>
     <footer></footer>
     <script>
     let players;
+    let round = 0;
     const catNames = ["Bubbles Cat", "Chuckles Cat", "Bob Cat", "Natasha Cat", "Boris Cat", "Fluffy Cat", "Smelly Cat"];
+    const beginScenarios = ["is on the brink of kicking kitty litter everywhere", "is buzzed up on Cat Nip and saying they will poo in all the shoes",
+    "is threatening to spray the place up.", "wants to bite every customer in the place", "informs you they will steal thumbtacks from corkboards and put them all the shoes when we're not looking."];
+    const scenario = ["extends one claw and drags it across their throat to signal the game will be over soon. They play five finger fillet with their sharpest claw and your fingers. You are shaking and afraid of the outcome this might be it for you...",
+        "starts to look at you pleadingly, paces around, and meows insistently. Your ears begin to curdle, its a horrible sound...",
+        "farts like a grown human. They call it death by 1000 litter boxes...the smell chokes you and causes your right eye to twitch...",
+        "pulls a BIG RED button from their poofy coat while they look dead into your eyes they press the button. A coil from the $5000 espresso machine pops out and flings towards you...",
+        "licks your hand and eyeballs. The goal, TOXOPLASMOSIS, unaware of if you are immune you hope for the best as you begin to sweat..."];
+    const $info = document.getElementById('info');
+    const $scoreBoard = document.getElementById('scoreBoard');
+    const $buttonContainer = document.getElementById('buttonContainer');
+
+    const toString = JSON.stringify;
+
+    const parse = JSON.parse;
 
     const randomNum = (max) => {
         if (typeof max === "number") {
@@ -48,9 +59,8 @@
     }
 
     function playerStatsView(players) {
-      let playerContent = '<h4 style="background:#f27ca4;border-bottom: black 2px solid;text-align: center;margin:0px; color:white">Score Board</h4>';
+      let playerContent = `<h4 style="background:#f27ca4;border-bottom: black 2px solid;text-align: center;margin:0px; color:white">ScoreBoard (Round: ${round})</h4>`;
       let playerKeys = Object.keys(players);
-      const toString = JSON.stringify;
 
       playerKeys.forEach(key => {
         let id = playerKeys.indexOf(key);
@@ -59,15 +69,20 @@
         let skips = toString(players[key]["skips"]) || "0";
         playerContent += 
         `<ul style="list-style:none; display:inline-block; padding:0; width:100%; margin:0;border-bottom:2px solid;">
-            <li style="margin: 0 0 0 1em; font-size: 16px;"><p id="playerScore-${id}" class="name">${JSON.parse(name) + (id === 0 ? " (you)" : '')}</p></li>
-            <li style="margin: 0 0 0 1em"><p><b>lives:</b> ${JSON.parse(lives)}</p></li>
-            <li style="margin: 0 0 0 1em"><p><b>skips:</b> ${JSON.parse(skips)}</p></li>
+            <li style="margin: 0 0 0 1em; font-size: 16px;"><p id="playerScore-${parse(id)}" class="name">${parse(name) + (id === 0 ? " (you)" : '')}</p></li>
+            <li style="margin: 0 0 0 1em"><p><b>lives:</b> ${lives}</p></li>
+            <li style="margin: 0 0 0 1em"><p><b>skips:</b> ${skips}</p></li>
         </ul>
         ` 
       })
 
       return `<div class="score" style="border:solid 2px; border-bottom: 0;display:block; margin-top: 1em;">${playerContent}</div>`;
     }
+
+    const getScenario = () => {
+      //splice to remove the scenario from array so there aren't duplicates
+      return scenario.splice(randomNum(scenario.length), 1); 
+    };
 
     const getName = () => { 
       return new Promise(function(resolve) {
@@ -81,8 +96,41 @@
     }
 
     const createFeralCatName = () => {
-      return catNames[randomNum(catNames.length)]
+      return catNames[randomNum(catNames.length)];
     }
+
+    const createBeginningScenario = () => {
+      return beginScenarios[randomNum(beginScenarios.length)]
+    }
+
+    const incrementRound = () => round += 1;
+
+    const endGame = () => {
+      addToPage($scoreBoard, '');
+      addToPage($info, 'GAMEOVER')
+      const $endButton = '<button onClick="document.location.reload(true)">Play Again</button>';
+      addToPage($buttonContainer, $endButton);
+    };
+
+    const getOutcome = () => {
+
+    };
+
+    const nextPlay = () => {
+      addToPage($info, getScenario());
+
+      if(round < 5) {
+        incrementRound();
+        addToPage($scoreBoard, playerStatsView(players))
+      } else {
+        endGame();
+      }
+      let player = Object.keys(players)[0];
+
+          // addToPage($buttonContainer, getNextPlayButton());
+    };
+
+    const getNextPlayButton = () => `<button onClick="nextPlay()">Next</button>`;
 
     const createPlayers = (playerName) => {
       return new Promise(function(resolve) {
@@ -100,12 +148,47 @@
       })
     }
 
+    function showRules(players) {
+    let player = Object.keys(players)[0];
+    let feralCat = Object.keys(players)[1];
+    const toString = JSON.stringify;
+
+    const introText = 
+    ` <p>
+      ${player}, you are the Manager of your local cat cafe, <b>Catopia</b>.
+      </p>
+      <p>
+        The health inspector is visiting today, your kittys are made aware of the impending visit and all hell breaks loose!
+      </p>
+      <p>The ring leader, ${feralCat}, ${createBeginningScenario()} causing a true Catastrophe.
+        ${feralCat}, informs you the only way to save your cafe is to beat them in a game of Kitty Roulette.
+      </p>
+      <p>
+        Normally, they play Kitty Roulette with
+          <b>9 lives</b>
+        but because of your feeble human body they are only giving you 3 Lives.
+      </p>
+      <p>
+        This is a game of probability! You may lose a life in some scenarios.
+        ${feralCat} will put you through a series of random Catty situations known to cause pain to humans.
+      </p>
+      <p> If the situation is bad enough you can lose one of your three lives. If you survive 5 Rounds with at least one life left you Win!
+      If you don't you will meet your demise and lose your job!</p>
+      `;
+    addToPage($info, introText);
+    addToPage($buttonContainer, getNextPlayButton());
+    }
+
     document.getElementById('playButton').addEventListener('click', (e) => {
       getName()
       .then(name => createPlayers(name))
       .then(players => {
-        const $scoreBoard = document.getElementById('scoreBoard');
-        addToPage($scoreBoard, playerStatsView(players))
+        showRules(players);
+        return players;
+      })
+      .then(players => {
+        // const $scoreBoard = document.getElementById('scoreBoard');
+        // addToPage($scoreBoard, playerStatsView(players))
       })
       e.preventDefault();
       })
